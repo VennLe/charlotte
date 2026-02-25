@@ -1,0 +1,80 @@
+# Charlotte API 服务组件配置 - 开发环境
+# 此文件包含开发环境特有的组件配置，全局配置请参考.env文件
+
+# 数据库连接池配置（开发环境优化）
+database:
+  max_open_conns: 50
+  max_idle_conns: 10
+  conn_max_lifetime: 1800
+  conn_max_idle_time: 900
+
+# Redis连接池配置（开发环境优化）
+redis:
+  pool_size: 20
+  min_idle_conns: 2
+  max_conn_age: 0
+  pool_timeout: 2
+
+# Kafka消费者配置（开发环境）
+kafka:
+  topic: "user-events"
+  group_id: "charlotte-dev"
+  auto_offset_reset: "earliest"
+  session_timeout: 30000
+  heartbeat_interval: 10000
+  max_poll_interval: 300000
+
+# JWT认证配置（开发环境）
+jwt:
+  expire: 24
+  issuer: "charlotte-api-dev"
+  audience: "charlotte-developers"
+
+# 日志详细配置（开发环境优化）
+log:
+  level: "debug"
+  encoding: "console"
+  output_paths:
+    - "stdout"
+    - "./logs/dev.log"
+  error_output_paths:
+    - "stderr"
+  development: true
+  disable_caller: false
+  disable_stacktrace: false
+  initial_fields:
+    app: "charlotte"
+    version: "1.0.0"
+    environment: "development"
+
+# 数据库迁移配置（开发环境）
+migrate:
+  enabled: true
+  auto_migrate: true
+  drop_tables: false
+  models:
+    - "user"
+    - "user_event"
+  create_indexes: true
+  verbose: true
+
+# 应用性能配置（开发环境优化）
+performance:
+  request_timeout: 60
+  response_timeout: 60
+  max_request_size: 5242880
+  rate_limit: 100
+
+# 健康检查配置（开发环境）
+health:
+  enabled: true
+  path: "/health"
+  interval: 60
+  timeout: 10
+
+# 开发工具配置
+devtools:
+  pprof_enabled: true
+  pprof_port: 6060
+  metrics_enabled: true
+  metrics_path: "/metrics"

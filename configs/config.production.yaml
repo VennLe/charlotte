@@ -1,0 +1,85 @@
+# Charlotte API 服务组件配置 - 生产环境
+# 此文件包含生产环境特有的组件配置，全局配置通过环境变量注入
+
+# 数据库连接池配置（生产环境优化）
+database:
+  max_open_conns: 200
+  max_idle_conns: 50
+  conn_max_lifetime: 3600
+  conn_max_idle_time: 1800
+
+# Redis连接池配置（生产环境优化）
+redis:
+  pool_size: 100
+  min_idle_conns: 20
+  max_conn_age: 0
+  pool_timeout: 4
+
+# Kafka消费者配置（生产环境）
+kafka:
+  topic: "user-events"
+  group_id: "charlotte-production"
+  auto_offset_reset: "latest"
+  session_timeout: 10000
+  heartbeat_interval: 3000
+  max_poll_interval: 300000
+
+# JWT认证配置（生产环境）
+jwt:
+  expire: 24
+  issuer: "charlotte-api"
+  audience: "charlotte-users"
+
+# 日志详细配置（生产环境优化）
+log:
+  level: "warn"
+  encoding: "json"
+  output_paths:
+    - "/var/log/charlotte/app.log"
+  error_output_paths:
+    - "/var/log/charlotte/error.log"
+  development: false
+  disable_caller: false
+  disable_stacktrace: false
+  initial_fields:
+    app: "charlotte"
+    version: "1.0.0"
+    environment: "production"
+
+# 数据库迁移配置（生产环境安全限制）
+migrate:
+  enabled: false
+  auto_migrate: false
+  drop_tables: false
+  models: []
+  create_indexes: false
+  verbose: false
+
+# 应用性能配置（生产环境优化）
+performance:
+  request_timeout: 30
+  response_timeout: 30
+  max_request_size: 10485760
+  rate_limit: 1000
+
+# 健康检查配置（生产环境）
+health:
+  enabled: true
+  path: "/health"
+  interval: 30
+  timeout: 5
+
+# 安全配置
+security:
+  cors_enabled: true
+  cors_origins:
+    - "https://yourdomain.com"
+  rate_limit_enabled: true
+  rate_limit_per_minute: 100
+
+# 监控配置
+monitoring:
+  metrics_enabled: true
+  metrics_path: "/metrics"
+  tracing_enabled: true
+  health_check_enabled: true

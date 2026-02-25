@@ -1,0 +1,63 @@
+# Charlotte API 服务配置 - 测试环境
+server:
+  name: "charlotte-api-test"
+  port: "8081"
+  mode: "test"
+
+# 数据库配置
+database:
+  host: "localhost"
+  port: "5432"
+  user: "postgres"
+  password: "test_password"
+  dbname: "charlotte_test"
+  max_open_conns: 20
+  max_idle_conns: 5
+
+# Redis配置
+redis:
+  host: "localhost"
+  port: "6379"
+  password: ""
+  db: 1
+  pool_size: 10
+
+# Kafka配置
+kafka:
+  brokers:
+    - "localhost:9092"
+  topic: "user-events-test"
+  group_id: "charlotte-test"
+
+# JWT配置
+jwt:
+  secret: "test-jwt-secret-key-here"
+  expire: 1
+
+# 日志配置
+log:
+  level: "debug"
+  encoding: "console"
+  output_paths:
+    - "stdout"
+    - "./logs/test.log"
+  error_output_paths:
+    - "stderr"
+  development: true
+  disable_caller: false
+  disable_stacktrace: false
+  initial_fields:
+    app: "charlotte"
+    version: "1.0.0"
+    environment: "test"
+
+# 数据库迁移配置
+migrate:
+  enabled: true
+  auto_migrate: true
+  drop_tables: true
+  models:
+    - "user"
+    - "user_event"
+  create_indexes: true
+  verbose: true
