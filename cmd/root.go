@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/automaxprocs/maxprocs"
 
 	"github.com/VennLe/charlotte/internal/config"
-	"github.com/VennLe/charlotte/pkg/logger"
 )
 
 var (
@@ -29,9 +29,10 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "配置文件路径 (默认: ./configs/config.yaml)")
 
-	// 设置 GOMAXPROCS
-	maxprocs.Set(maxprocs.Logger(func(format string, v ...interface{}) {
-		logger.Debugf(format, v...)
+	// 设置 GOMAXPROCS（在 init 中设置，但使用标准日志避免未初始化问题）
+	_, _ = maxprocs.Set(maxprocs.Logger(func(format string, v ...interface{}) {
+		// 使用标准日志而不是应用日志，因为此时日志还未初始化
+		log.Printf(format, v...)
 	}))
 }
 

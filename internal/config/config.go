@@ -154,13 +154,25 @@ func LoadConfig(cfgFile string) {
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
 		if err := v.Unmarshal(Global); err != nil {
-			logger.Error("配置热更新失败", zap.Error(err))
+			if logger.GetLogger() != nil {
+				logger.Error("配置热更新失败", zap.Error(err))
+			} else {
+				log.Printf("配置热更新失败: %v", err)
+			}
 			return
 		}
-		logger.Info("配置已热更新", zap.String("file", e.Name))
+		if logger.GetLogger() != nil {
+			logger.Info("配置已热更新", zap.String("file", e.Name))
+		} else {
+			log.Printf("配置已热更新: %s", e.Name)
+		}
 	})
 
-	logger.Info("配置加载成功", zap.String("file", v.ConfigFileUsed()))
+	if logger.GetLogger() != nil {
+		logger.Info("配置加载成功", zap.String("file", v.ConfigFileUsed()))
+	} else {
+		log.Printf("配置加载成功: %s", v.ConfigFileUsed())
+	}
 }
 
 // setDefaults 设置默认配置值
@@ -288,7 +300,11 @@ func Validate() error {
 		return fmt.Errorf("JWT密钥不能为空")
 	}
 	if len(Global.JWT.Secret) < 32 {
-		logger.Warn("JWT密钥长度建议至少32位，当前密钥安全性较低")
+		if logger.GetLogger() != nil {
+			logger.Warn("JWT密钥长度建议至少32位，当前密钥安全性较低")
+		} else {
+			log.Println("警告: JWT密钥长度建议至少32位，当前密钥安全性较低")
+		}
 	}
 
 	// 验证Kafka配置

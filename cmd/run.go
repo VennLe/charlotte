@@ -31,6 +31,7 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		runServer()
 	},
+	Aliases: []string{"run", "server"},
 }
 
 var migrateCmd = &cobra.Command{
@@ -111,10 +112,6 @@ func runServer() {
 	logger.Info(config.GetConfigSummary())
 
 	// 3. 初始化组件
-	if err := initialize.InitNacos(); err != nil {
-		logger.Fatal("Nacos 初始化失败", zap.Error(err))
-	}
-
 	if err := initialize.InitRedis(); err != nil {
 		logger.Fatal("Redis 初始化失败", zap.Error(err))
 	}
@@ -123,6 +120,7 @@ func runServer() {
 		logger.Fatal("Kafka 初始化失败", zap.Error(err))
 	}
 
+	// 数据库必须成功连接，否则无法运行
 	if err := initialize.InitGorm(); err != nil {
 		logger.Fatal("数据库初始化失败", zap.Error(err))
 	}
@@ -149,10 +147,8 @@ func runServer() {
 	<-quit
 	logger.Info("正在关闭服务...")
 
-	// 注销 Nacos 服务
-	if err := initialize.DeregisterService(); err != nil {
-		logger.Error("Nacos 服务注销失败", zap.Error(err))
-	}
+	// 关闭 Kafka 连接
+	initialize.CloseKafka()
 
 	logger.Info("服务已停止")
 }

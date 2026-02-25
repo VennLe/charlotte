@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"github.com/IBM/sarama"
 	"github.com/gin-gonic/gin"
 
 	"github.com/VennLe/charlotte/internal/handler"
@@ -12,7 +13,13 @@ import (
 func InitRouter() *gin.Engine {
 	// 初始化服务层
 	userService := service.NewUserService(DB)
-	healthChecker := service.NewHealthChecker(DB, Redis, KafkaProducer)
+
+	// 初始化健康检查器，处理 Kafka 可能为 nil 的情况
+	var kafkaProducer sarama.SyncProducer
+	if KafkaProducer != nil {
+		kafkaProducer = *KafkaProducer
+	}
+	healthChecker := service.NewHealthChecker(DB, Redis, kafkaProducer)
 
 	// 初始化处理器
 	userHandler := handler.NewUserHandler(userService)
