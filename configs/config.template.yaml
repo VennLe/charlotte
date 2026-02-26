@@ -1,0 +1,258 @@
+# Charlotte API 配置模板文件
+# 此文件是配置模板，请复制为 config.secure.yaml 并根据需要修改
+# 支持环境变量覆盖，格式: ${ENV_VAR_NAME:-default_value}
+
+# 服务器配置
+server:
+  # 服务器名称
+  name: ${CHARLOTTE_SERVER_NAME:-charlotte-api}
+  
+  # 服务器端口
+  port: ${CHARLOTTE_SERVER_PORT:-8080}
+  
+  # 运行模式: debug, release, test
+  mode: ${CHARLOTTE_SERVER_MODE:-debug}
+  
+  # 请求超时时间（秒）
+  timeout: ${CHARLOTTE_SERVER_TIMEOUT:-30}
+  
+  # 最大请求体大小（MB）
+  max_body_size: ${CHARLOTTE_MAX_BODY_SIZE:-10}
+
+# 数据库配置
+database:
+  # 数据库主机
+  host: ${CHARLOTTE_DB_HOST:-localhost}
+  
+  # 数据库端口
+  port: ${CHARLOTTE_DB_PORT:-5432}
+  
+  # 数据库用户名
+  user: ${CHARLOTTE_DB_USER:-postgres}
+  
+  # 数据库密码（建议使用环境变量）
+  password: ${CHARLOTTE_DB_PASSWORD:-postgres}
+  
+  # 数据库名称
+  dbname: ${CHARLOTTE_DB_NAME:-charlotte}
+  
+  # 连接池配置
+  pool:
+    # 最大连接数
+    max_open_conns: ${CHARLOTTE_DB_MAX_CONNS:-100}
+    
+    # 最大空闲连接数
+    max_idle_conns: ${CHARLOTTE_DB_IDLE_CONNS:-10}
+    
+    # 连接最大生存时间（秒）
+    conn_max_lifetime: ${CHARLOTTE_DB_CONN_LIFETIME:-3600}
+    
+    # 连接最大空闲时间（秒）
+    conn_max_idle_time: ${CHARLOTTE_DB_CONN_IDLE_TIME:-1800}
+
+# Redis配置
+redis:
+  # Redis主机
+  host: ${CHARLOTTE_REDIS_HOST:-localhost}
+  
+  # Redis端口
+  port: ${CHARLOTTE_REDIS_PORT:-6379}
+  
+  # Redis密码（建议使用环境变量）
+  password: ${CHARLOTTE_REDIS_PASSWORD:-}
+  
+  # Redis数据库编号
+  db: ${CHARLOTTE_REDIS_DB:-0}
+  
+  # 连接池配置
+  pool:
+    # 最大连接数
+    max_open_conns: ${CHARLOTTE_REDIS_MAX_CONNS:-50}
+    
+    # 最大空闲连接数
+    max_idle_conns: ${CHARLOTTE_REDIS_IDLE_CONNS:-5}
+    
+    # 连接超时时间（秒）
+    dial_timeout: ${CHARLOTTE_REDIS_DIAL_TIMEOUT:-5}
+    
+    # 读取超时时间（秒）
+    read_timeout: ${CHARLOTTE_REDIS_READ_TIMEOUT:-3}
+    
+    # 写入超时时间（秒）
+    write_timeout: ${CHARLOTTE_REDIS_WRITE_TIMEOUT:-3}
+
+# JWT认证配置
+jwt:
+  # JWT密钥（必须使用环境变量设置）
+  secret: ${CHARLOTTE_JWT_SECRET:-your-32-byte-jwt-secret-key-here}
+  
+  # JWT过期时间（小时）
+  expire: ${CHARLOTTE_JWT_EXPIRE:-24}
+  
+  # 签发者
+  issuer: ${CHARLOTTE_JWT_ISSUER:-charlotte-api}
+  
+  # 受众
+  audience: ${CHARLOTTE_JWT_AUDIENCE:-charlotte-client}
+
+# 日志配置
+log:
+  # 日志级别: debug, info, warn, error
+  level: ${CHARLOTTE_LOG_LEVEL:-info}
+  
+  # 日志格式: json, text
+  format: ${CHARLOTTE_LOG_FORMAT:-json}
+  
+  # 日志文件路径（空表示输出到控制台）
+  file: ${CHARLOTTE_LOG_FILE:-}
+  
+  # 日志文件最大大小（MB）
+  max_size: ${CHARLOTTE_LOG_MAX_SIZE:-100}
+  
+  # 日志文件保留天数
+  max_age: ${CHARLOTTE_LOG_MAX_AGE:-30}
+  
+  # 日志文件最大备份数
+  max_backups: ${CHARLOTTE_LOG_MAX_BACKUPS:-10}
+
+# 安全配置
+security:
+  # 配置加密密钥（32字节，建议使用环境变量）
+  encryption_key: ${CHARLOTTE_ENCRYPTION_KEY:-}
+  
+  # CORS配置
+  cors:
+    # 允许的源
+    allowed_origins: ${CHARLOTTE_CORS_ORIGINS:-*}
+    
+    # 允许的方法
+    allowed_methods: ${CHARLOTTE_CORS_METHODS:-GET,POST,PUT,DELETE,OPTIONS}
+    
+    # 允许的头部
+    allowed_headers: ${CHARLOTTE_CORS_HEADERS:-*}
+    
+    # 是否允许凭据
+    allow_credentials: ${CHARLOTTE_CORS_CREDENTIALS:-false}
+    
+    # 预检请求缓存时间（秒）
+    max_age: ${CHARLOTTE_CORS_MAX_AGE:-86400}
+
+# 性能配置
+performance:
+  # 最大并发连接数
+  max_connections: ${CHARLOTTE_MAX_CONNECTIONS:-1000}
+  
+  # 请求超时时间（秒）
+  request_timeout: ${CHARLOTTE_REQUEST_TIMEOUT:-30}
+  
+  # 响应超时时间（秒）
+  response_timeout: ${CHARLOTTE_RESPONSE_TIMEOUT:-60}
+  
+  # 缓存配置
+  cache:
+    # 缓存过期时间（秒）
+    ttl: ${CHARLOTTE_CACHE_TTL:-300}
+    
+    # 缓存清理间隔（秒）
+    cleanup_interval: ${CHARLOTTE_CACHE_CLEANUP:-60}
+
+# 文件上传配置
+upload:
+  # 允许的文件类型
+  allowed_types: ${CHARLOTTE_UPLOAD_TYPES:-image/jpeg,image/png,image/gif,application/pdf}
+  
+  # 最大文件大小（MB）
+  max_size: ${CHARLOTTE_UPLOAD_MAX_SIZE:-10}
+  
+  # 上传目录
+  directory: ${CHARLOTTE_UPLOAD_DIR:-./uploads}
+  
+  # 是否启用文件校验
+  enable_checksum: ${CHARLOTTE_UPLOAD_CHECKSUM:-true}
+
+# 导入导出配置
+import_export:
+  # 导入文件大小限制（MB）
+  import_max_size: ${CHARLOTTE_IMPORT_MAX_SIZE:-50}
+  
+  # 导出文件大小限制（MB）
+  export_max_size: ${CHARLOTTE_EXPORT_MAX_SIZE:-100}
+  
+  # 导入并发数
+  import_concurrency: ${CHARLOTTE_IMPORT_CONCURRENCY:-5}
+  
+  # 导出并发数
+  export_concurrency: ${CHARLOTTE_EXPORT_CONCURRENCY:-3}
+  
+  # 临时文件目录
+  temp_dir: ${CHARLOTTE_IMPORT_EXPORT_TEMP_DIR:-./temp}
+
+# 健康检查配置
+health_check:
+  # 健康检查端点
+  endpoint: ${CHARLOTTE_HEALTH_ENDPOINT:-/health}
+  
+  # 检查间隔（秒）
+  interval: ${CHARLOTTE_HEALTH_INTERVAL:-30}
+  
+  # 超时时间（秒）
+  timeout: ${CHARLOTTE_HEALTH_TIMEOUT:-5}
+  
+  # 检查项
+  checks:
+    # 数据库健康检查
+    database: ${CHARLOTTE_HEALTH_CHECK_DB:-true}
+    
+    # Redis健康检查
+    redis: ${CHARLOTTE_HEALTH_CHECK_REDIS:-true}
+    
+    # 磁盘空间检查
+    disk: ${CHARLOTTE_HEALTH_CHECK_DISK:-true}
+    
+    # 内存使用检查
+    memory: ${CHARLOTTE_HEALTH_CHECK_MEMORY:-true}
+
+# 监控配置
+monitoring:
+  # 是否启用监控
+  enabled: ${CHARLOTTE_MONITORING_ENABLED:-false}
+  
+  # 监控端口
+  port: ${CHARLOTTE_MONITORING_PORT:-9090}
+  
+  # 监控路径
+  path: ${CHARLOTTE_MONITORING_PATH:-/metrics}
+  
+  # 指标收集间隔（秒）
+  interval: ${CHARLOTTE_MONITORING_INTERVAL:-30}
+
+# 环境特定配置（通过环境变量切换）
+environment:
+  # 当前环境: development, staging, production
+  name: ${CHARLOTTE_ENV:-development}
+  
+  # 是否启用调试模式
+  debug: ${CHARLOTTE_DEBUG:-false}
+  
+  # 是否启用详细日志
+  verbose: ${CHARLOTTE_VERBOSE:-false}
+
+# 配置说明
+# ===========
+#
+# 1. 环境变量优先级高于配置文件
+# 2. 敏感信息（密码、密钥）建议使用环境变量
+# 3. 生产环境建议启用配置加密
+# 4. 定期轮换加密密钥
+#
+# 使用示例:
+#   export CHARLOTTE_DB_PASSWORD=your-secure-password
+#   export CHARLOTTE_JWT_SECRET=your-32-byte-secret
+#   export CHARLOTTE_ENCRYPTION_KEY=your-encryption-key
+#
+# 安全建议:
+#   - 使用强密码和密钥
+#   - 定期轮换密钥
+#   - 使用密钥管理系统
+#   - 设置文件权限为600
+#   - 启用配置加密

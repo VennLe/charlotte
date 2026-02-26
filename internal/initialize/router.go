@@ -21,15 +21,21 @@ func InitRouter() *gin.Engine {
 	}
 	healthChecker := service.NewHealthChecker(DB, Redis, kafkaProducer)
 
+	// 初始化服务层
+	fileService := service.NewFileService()
+	importExportService := service.NewImportExportService(fileService)
+
 	// 初始化处理器
 	userHandler := handler.NewUserHandler(userService)
 	healthHandler := handler.NewHealthHandler(healthChecker)
+	importExportHandler := handler.NewImportExportHandler(importExportService, fileService)
 
 	// 组装依赖
 	deps := &router.Dependencies{
-		UserHandler:   userHandler,
-		HealthHandler: healthHandler,
-		RedisClient:   Redis,
+		UserHandler:         userHandler,
+		HealthHandler:       healthHandler,
+		ImportExportHandler: importExportHandler,
+		RedisClient:         Redis, // 如果Redis初始化失败，这里会是nil
 	}
 
 	return router.NewRouter(deps)

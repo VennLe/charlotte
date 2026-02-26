@@ -32,6 +32,12 @@ func InitKafka() error {
 
 	producer, err := sarama.NewSyncProducer(cfg.Brokers, saramaConfig)
 	if err != nil {
+		// 开发模式下只警告，不阻止启动
+		if config.Global.Server.Mode == "debug" {
+			logger.Warn("Kafka 连接失败，将以无消息队列模式运行", zap.Error(err))
+			KafkaProducer = nil
+			return nil
+		}
 		return fmt.Errorf("初始化 Kafka 生产者失败: %w", err)
 	}
 	KafkaProducer = &producer

@@ -112,21 +112,30 @@ func runServer() {
 	logger.Info(config.GetConfigSummary())
 
 	// 3. 初始化组件
+	// Redis 和 Kafka 是可选的，数据库是必需的
+	logger.Debug("开始初始化Redis")
 	if err := initialize.InitRedis(); err != nil {
-		logger.Fatal("Redis 初始化失败", zap.Error(err))
+		logger.Error("Redis 初始化失败", zap.Error(err))
 	}
+	logger.Debug("Redis初始化完成")
 
+	logger.Debug("开始初始化Kafka")
 	if err := initialize.InitKafka(); err != nil {
-		logger.Fatal("Kafka 初始化失败", zap.Error(err))
+		logger.Error("Kafka 初始化失败", zap.Error(err))
 	}
+	logger.Debug("Kafka初始化完成")
 
 	// 数据库必须成功连接，否则无法运行
+	logger.Debug("开始初始化数据库")
 	if err := initialize.InitGorm(); err != nil {
 		logger.Fatal("数据库初始化失败", zap.Error(err))
 	}
+	logger.Debug("数据库初始化完成")
 
 	// 4. 初始化路由
+	logger.Debug("开始初始化路由")
 	router := initialize.InitRouter()
+	logger.Debug("路由初始化完成")
 
 	// 5. 优雅关闭
 	quit := make(chan os.Signal, 1)

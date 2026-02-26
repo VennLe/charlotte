@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
@@ -15,18 +16,20 @@ import (
 var Global *Config
 
 type Config struct {
-	Server      ServerConfig      `mapstructure:"server" json:"server"`
-	Database    DatabaseConfig    `mapstructure:"database" json:"database"`
-	Redis       RedisConfig       `mapstructure:"redis" json:"redis"`
-	Kafka       KafkaConfig       `mapstructure:"kafka" json:"kafka"`
-	Log         logger.Config     `mapstructure:"log" json:"log"`
-	JWT         JWTConfig         `mapstructure:"jwt" json:"jwt"`
-	Migrate     MigrateConfig     `mapstructure:"migrate" json:"migrate"`
-	Performance PerformanceConfig `mapstructure:"performance" json:"performance"`
-	Health      HealthConfig      `mapstructure:"health" json:"health"`
-	Security    SecurityConfig    `mapstructure:"security" json:"security"`
-	Monitoring  MonitoringConfig  `mapstructure:"monitoring" json:"monitoring"`
-	DevTools    DevToolsConfig    `mapstructure:"devtools" json:"devtools"`
+	Server       ServerConfig       `mapstructure:"server" json:"server"`
+	Database     DatabaseConfig     `mapstructure:"database" json:"database"`
+	Redis        RedisConfig        `mapstructure:"redis" json:"redis"`
+	Kafka        KafkaConfig        `mapstructure:"kafka" json:"kafka"`
+	Log          logger.Config      `mapstructure:"log" json:"log"`
+	JWT          JWTConfig          `mapstructure:"jwt" json:"jwt"`
+	Migrate      MigrateConfig      `mapstructure:"migrate" json:"migrate"`
+	Performance  PerformanceConfig  `mapstructure:"performance" json:"performance"`
+	Health       HealthConfig       `mapstructure:"health" json:"health"`
+	Security     SecurityConfig     `mapstructure:"security" json:"security"`
+	Monitoring   MonitoringConfig   `mapstructure:"monitoring" json:"monitoring"`
+	DevTools     DevToolsConfig     `mapstructure:"devtools" json:"devtools"`
+	File         FileConfig         `mapstructure:"file" json:"file"`
+	ImportExport ImportExportConfig `mapstructure:"import_export" json:"import_export"`
 }
 
 type PerformanceConfig struct {
@@ -64,6 +67,23 @@ type DevToolsConfig struct {
 	MetricsPath    string `mapstructure:"metrics_path" json:"metrics_path"`
 }
 
+// FileConfig 文件上传配置
+type FileConfig struct {
+	UploadPath       string   `mapstructure:"upload_path" json:"upload_path"`
+	MaxUploadSize    int64    `mapstructure:"max_upload_size" json:"max_upload_size"`
+	AllowedTypes     []string `mapstructure:"allowed_types" json:"allowed_types"`
+	AllowedExtensions []string `mapstructure:"allowed_extensions" json:"allowed_extensions"`
+}
+
+// ImportExportConfig 导入导出配置
+type ImportExportConfig struct {
+	DefaultDateFormat string   `mapstructure:"default_date_format" json:"default_date_format"`
+	DefaultTimeFormat string   `mapstructure:"default_time_format" json:"default_time_format"`
+	MaxImportRows     int      `mapstructure:"max_import_rows" json:"max_import_rows"`
+	SupportedDataTypes []string `mapstructure:"supported_data_types" json:"supported_data_types"`
+	SupportedFileTypes []string `mapstructure:"supported_file_types" json:"supported_file_types"`
+}
+
 type MigrateConfig struct {
 	Enabled       bool     `mapstructure:"enabled" json:"enabled"`
 	AutoMigrate   bool     `mapstructure:"auto_migrate" json:"auto_migrate"`
@@ -74,9 +94,10 @@ type MigrateConfig struct {
 }
 
 type ServerConfig struct {
-	Name string `mapstructure:"name" json:"name"`
-	Port string `mapstructure:"port" json:"port"`
-	Mode string `mapstructure:"mode" json:"mode"` // debug/release
+	Name    string `mapstructure:"name" json:"name"`
+	Port    string `mapstructure:"port" json:"port"`
+	Mode    string `mapstructure:"mode" json:"mode"` // debug/release
+	BaseURL string `mapstructure:"base_url" json:"base_url"`
 }
 
 type DatabaseConfig struct {
@@ -108,74 +129,54 @@ type JWTConfig struct {
 	Expire int    `mapstructure:"expire" json:"expire"` // 小时
 }
 
-// Load 加载配置（兼容旧版本，推荐使用LoadConfig）
+// Load 加载配置（兼容旧版本，推荐使用LoadSecureConfig）
 func Load(cfgFile string) {
-	LoadConfig(cfgFile)
+	LoadSecureConfig(cfgFile)
 }
 
-// LoadConfig 加载配置
+// LoadConfig 加载配置（兼容旧版本）
 func LoadConfig(cfgFile string) {
-	v := viper.New()
-
-	// 设置默认值
-	setDefaults(v)
-
-	// 环境变量支持
-	v.AutomaticEnv()
-	v.SetEnvPrefix("CHARLOTTE")
-	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-
-	// 配置文件加载
-	if cfgFile != "" {
-		v.SetConfigFile(cfgFile)
-	} else {
-		v.AddConfigPath(".")
-		v.AddConfigPath("./configs")
-		v.AddConfigPath("/etc/charlotte")
-		v.SetConfigName("config")
-		v.SetConfigType("yaml")
-	}
-
-	// 读取配置文件
-	if err := v.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			logger.Warn("配置文件未找到，使用默认配置和环境变量")
-		} else {
-			log.Fatalf("配置文件读取失败: %v", err)
-		}
-	}
-
-	Global = &Config{}
-	if err := v.Unmarshal(Global); err != nil {
-		log.Fatalf("配置解析失败: %v", err)
-	}
-
-	// 监听配置变化
-	v.WatchConfig()
-	v.OnConfigChange(func(e fsnotify.Event) {
-		if err := v.Unmarshal(Global); err != nil {
-			if logger.GetLogger() != nil {
-				logger.Error("配置热更新失败", zap.Error(err))
-			} else {
-				log.Printf("配置热更新失败: %v", err)
-			}
-			return
-		}
-		if logger.GetLogger() != nil {
-			logger.Info("配置已热更新", zap.String("file", e.Name))
-		} else {
-			log.Printf("配置已热更新: %s", e.Name)
-		}
-	})
-
-	if logger.GetLogger() != nil {
-		logger.Info("配置加载成功", zap.String("file", v.ConfigFileUsed()))
-	} else {
-		log.Printf("配置加载成功: %s", v.ConfigFileUsed())
-	}
+	LoadSecureConfig(cfgFile)
 }
 
-// setDefaults 设置默认配置值
+// LoadSecureConfig 加载安全配置（推荐使用）
+func LoadSecureConfig(cfgFile string) error {
+	// 优先使用新的安全配置系统
+	scm := NewSecureConfigManager()
+	
+	// 设置配置文件路径
+	configPath := cfgFile
+	if configPath == "" {
+		// 尝试查找安全配置文件
+		configPaths := []string{
+			"./configs/config.secure.yaml",
+			"./configs/config.yaml", 
+			"./config.yaml",
+			"/etc/charlotte/config.yaml",
+			"$HOME/.charlotte/config.yaml",
+		}
+		
+		for _, path := range configPaths {
+			if _, err := os.Stat(path); err == nil {
+				configPath = path
+				break
+			}
+		}
+	}
+	
+	// 加载配置
+	if err := scm.LoadSecureConfig(configPath); err != nil {
+		// 回退到旧配置系统
+		logger.Warn("安全配置加载失败，使用旧配置系统", zap.Error(err))
+		return loadLegacyConfig(cfgFile)
+	}
+	
+	// 成功加载安全配置
+	logger.Info("安全配置加载成功", zap.String("file", configPath))
+	return nil
+}
+
+// setDefaults 设置配置默认值
 func setDefaults(v *viper.Viper) {
 	// 服务器默认配置
 	v.SetDefault("server.name", "charlotte-api")
@@ -217,7 +218,7 @@ func setDefaults(v *viper.Viper) {
 	v.SetDefault("jwt.audience", "charlotte-users")
 
 	// 日志默认配置
-	v.SetDefault("log.level", "info")
+	v.SetDefault("log.level", "debug")
 	v.SetDefault("log.encoding", "json")
 	v.SetDefault("log.output_paths", []string{"stdout"})
 	v.SetDefault("log.error_output_paths", []string{"stderr"})
@@ -259,6 +260,46 @@ func setDefaults(v *viper.Viper) {
 	v.SetDefault("devtools.pprof_port", 6060)
 	v.SetDefault("devtools.metrics_enabled", false)
 	v.SetDefault("devtools.metrics_path", "/metrics")
+
+	// 文件上传默认值
+	v.SetDefault("file.upload_path", "resources")
+	v.SetDefault("file.max_upload_size", 10485760)
+	v.SetDefault("file.allowed_types", []string{
+		"image/jpeg",
+		"image/png",
+		"image/gif",
+		"image/webp",
+		"application/pdf",
+		"application/msword",
+		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		"application/vnd.ms-excel",
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		"text/plain",
+		"text/csv",
+		"application/json",
+	})
+	v.SetDefault("file.allowed_extensions", []string{
+		".jpg",
+		".jpeg",
+		".png",
+		".gif",
+		".webp",
+		".pdf",
+		".doc",
+		".docx",
+		".xls",
+		".xlsx",
+		".txt",
+		".csv",
+		".json",
+	})
+
+	// 导入导出默认值
+	v.SetDefault("import_export.default_date_format", "2006-01-02")
+	v.SetDefault("import_export.default_time_format", "15:04:05")
+	v.SetDefault("import_export.max_import_rows", 10000)
+	v.SetDefault("import_export.supported_data_types", []string{"user", "product", "order", "customer"})
+	v.SetDefault("import_export.supported_file_types", []string{"csv", "excel", "json"})
 }
 
 func Show() {
@@ -336,4 +377,71 @@ func GetConfigSummary() string {
 		Global.Redis.Host, Global.Redis.Port,
 		len(Global.Kafka.Brokers),
 		Global.JWT.Expire)
+}
+
+// loadLegacyConfig 加载旧配置系统（向后兼容）
+func loadLegacyConfig(cfgFile string) error {
+	v := viper.New()
+
+	// 设置默认值
+	setDefaults(v)
+
+	// 环境变量支持
+	v.AutomaticEnv()
+	v.SetEnvPrefix("CHARLOTTE")
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
+
+	// 配置文件加载
+	if cfgFile != "" {
+		v.SetConfigFile(cfgFile)
+	} else {
+		v.AddConfigPath(".")
+		v.AddConfigPath("./configs")
+		v.AddConfigPath("/etc/charlotte")
+		v.AddConfigPath("$HOME/.charlotte")
+		v.SetConfigName("config")
+		v.SetConfigType("yaml")
+	}
+
+	// 读取配置文件
+	if err := v.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			logger.Warn("配置文件未找到，使用默认配置和环境变量")
+		} else {
+			log.Printf("配置文件读取失败: %v", err)
+			return err
+		}
+	}
+
+	Global = &Config{}
+	if err := v.Unmarshal(Global); err != nil {
+		log.Printf("配置解析失败: %v", err)
+		return err
+	}
+
+	// 监听配置变化
+	v.WatchConfig()
+	v.OnConfigChange(func(e fsnotify.Event) {
+		if err := v.Unmarshal(Global); err != nil {
+			if logger.GetLogger() != nil {
+				logger.Error("配置热更新失败", zap.Error(err))
+			} else {
+				log.Printf("配置热更新失败: %v", err)
+			}
+			return
+		}
+		if logger.GetLogger() != nil {
+			logger.Info("配置已热更新", zap.String("file", e.Name))
+		} else {
+			log.Printf("配置已热更新: %s", e.Name)
+		}
+	})
+
+	if logger.GetLogger() != nil {
+		logger.Info("旧配置系统加载成功", zap.String("file", v.ConfigFileUsed()))
+	} else {
+		log.Printf("旧配置系统加载成功: %s", v.ConfigFileUsed())
+	}
+	
+	return nil
 }

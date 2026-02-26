@@ -203,3 +203,423 @@ main.main
 	D:/code/git-repository/charlotte/main.go:6
 runtime.main
 	D:/env/go1.24.12/src/runtime/proc.go:283
+2026-02-26T10:01:25.599+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:01:25.600+0800	warn	config/config.go:304	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:01:25.600+0800	info	config/config.go:315	配置验证通过
+2026-02-26T10:01:25.600+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:01:27.718+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:01:28.479+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:15:50.539+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:15:50.540+0800	warn	config/config.go:304	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:15:50.540+0800	info	config/config.go:315	配置验证通过
+2026-02-26T10:15:50.540+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:15:52.665+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:15:53.426+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/go1.24.12/src/runtime/proc.go:283
+2026-02-26T10:49:32.675+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:49:32.676+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:49:32.676+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:49:32.676+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:49:34.799+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:49:35.558+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:51:00.218+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:51:00.218+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:51:00.218+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:51:00.218+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:51:02.332+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:51:03.093+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:51:43.379+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:51:43.379+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:51:43.379+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:51:43.379+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:51:45.499+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:51:46.257+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:55:13.085+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:55:13.086+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:55:13.086+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:55:13.086+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:55:15.197+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:55:15.953+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:55:54.496+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:55:54.496+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:55:54.496+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:55:54.496+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:55:56.611+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:55:57.370+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:57:23.587+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:57:23.587+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:57:23.587+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:57:23.587+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:57:25.704+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:57:26.463+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T10:59:06.656+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T10:59:06.656+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T10:59:06.656+0800	info	config/config.go:375	配置验证通过
+2026-02-26T10:59:06.656+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T10:59:08.772+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T10:59:09.531+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T11:07:09.823+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T11:07:09.823+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T11:07:09.823+0800	info	config/config.go:375	配置验证通过
+2026-02-26T11:07:09.823+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T11:07:11.940+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T11:07:12.699+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T11:08:00.525+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T11:08:00.525+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T11:08:00.525+0800	info	config/config.go:375	配置验证通过
+2026-02-26T11:08:00.525+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T11:08:02.653+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T11:08:03.415+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T11:09:41.956+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T11:09:41.957+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T11:09:41.957+0800	info	config/config.go:375	配置验证通过
+2026-02-26T11:09:41.957+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T11:09:44.117+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T11:09:44.878+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T11:11:40.591+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T11:11:40.591+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T11:11:40.591+0800	info	config/config.go:375	配置验证通过
+2026-02-26T11:11:40.591+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T11:11:42.706+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T11:11:43.461+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283
+2026-02-26T11:20:37.074+0800	info	cmd/run.go:104	启动 Charlotte API	{"version": "dev", "build_time": "unknown"}
+2026-02-26T11:20:37.074+0800	warn	config/config.go:364	JWT密钥长度建议至少32位，当前密钥安全性较低
+2026-02-26T11:20:37.074+0800	info	config/config.go:375	配置验证通过
+2026-02-26T11:20:37.074+0800	info	cmd/run.go:112	
+配置摘要:
+  Server:   charlotte-api:8080 (debug)
+  Database: postgres@localhost:5432/charlotte
+  Redis:    localhost:6379
+  Kafka:    1 brokers
+  Nacos:    %!s(int=24):%!d(MISSING)
+  JWT:      %!d(MISSING)小时过期
+
+2026-02-26T11:20:39.189+0800	warn	initialize/redis.go:36	Redis 连接失败，将以无缓存模式运行	{"error": "dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it."}
+2026-02-26T11:20:39.946+0800	fatal	cmd/run.go:120	Kafka 初始化失败	{"error": "初始化 Kafka 生产者失败: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}
+github.com/VennLe/charlotte/cmd.runServer
+	D:/code/charlotte/cmd/run.go:120
+github.com/VennLe/charlotte/cmd.init.func1
+	D:/code/charlotte/cmd/run.go:32
+github.com/spf13/cobra.(*Command).execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1019
+github.com/spf13/cobra.(*Command).ExecuteC
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148
+github.com/spf13/cobra.(*Command).Execute
+	C:/Users/v_lweiili/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1071
+github.com/VennLe/charlotte/cmd.Execute
+	D:/code/charlotte/cmd/root.go:44
+main.main
+	D:/code/charlotte/main.go:6
+runtime.main
+	C:/Users/v_lweiili/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.12.windows-amd64/src/runtime/proc.go:283

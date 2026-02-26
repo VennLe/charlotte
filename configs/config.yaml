@@ -64,6 +64,53 @@ performance:
   max_request_size: 10485760
   rate_limit: 1000
 
+# 文件上传配置
+file:
+  upload_path: "resources"
+  max_upload_size: 10485760
+  allowed_types:
+    - "image/jpeg"
+    - "image/png"
+    - "image/gif"
+    - "image/webp"
+    - "application/pdf"
+    - "application/msword"
+    - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    - "application/vnd.ms-excel"
+    - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    - "text/plain"
+    - "text/csv"
+    - "application/json"
+  allowed_extensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".webp"
+    - ".pdf"
+    - ".doc"
+    - ".docx"
+    - ".xls"
+    - ".xlsx"
+    - ".txt"
+    - ".csv"
+    - ".json"
+
+# 导入导出配置
+import_export:
+  default_date_format: "2006-01-02"
+  default_time_format: "15:04:05"
+  max_import_rows: 10000
+  supported_data_types:
+    - "user"
+    - "product"
+    - "order"
+    - "customer"
+  supported_file_types:
+    - "csv"
+    - "excel"
+    - "json"
+
 # 健康检查配置
 health:
   enabled: true
