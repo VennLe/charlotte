@@ -19,8 +19,13 @@ type User struct {
 	Avatar    string    `gorm:"size:255" json:"avatar"`
 	Phone     string    `gorm:"size:20" json:"phone"`
 	Status    int       `gorm:"default:1;comment:1正常 2禁用" json:"status"`
-	Role      string    `gorm:"size:20;default:user" json:"role"` // admin/user
+	Role      string    `gorm:"size:20;default:user" json:"role"` // guest/user/vip/admin/superadmin
 	LastLogin time.Time `json:"last_login"`
+	
+	// 权限相关字段
+	PermissionLevel int    `gorm:"default:1;comment:权限级别 1-低 2-中 3-高" json:"permission_level"`
+	IsSuperAdmin    bool   `gorm:"default:false;comment:是否为超级管理员" json:"is_super_admin"`
+	Tags            string `gorm:"size:255;comment:用户标签，逗号分隔" json:"tags"`
 }
 
 // UserEvent 用户事件 (用于 Kafka)
