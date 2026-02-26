@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	gLogger "gorm.io/gorm/logger"
 
@@ -20,8 +22,11 @@ var DB *gorm.DB
 func InitGorm() error {
 	cfg := config.Global.Database
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
-		cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port)
+	// 根据数据库类型生成DSN
+	dsn, err := generateDSN(cfg)
+	if err != nil {
+		return fmt.Errorf("生成DSN失败: %w", err)
+	}
 
 	// 根据环境设置日志级别
 	var logLevel gLogger.LogLevel
@@ -31,12 +36,34 @@ func InitGorm() error {
 		logLevel = gLogger.Error
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: gLogger.Default.LogMode(logLevel),
-		NowFunc: func() time.Time {
-			return time.Now().Local()
-		},
-	})
+	// 根据数据库类型创建连接
+	var db *gorm.DB
+	switch cfg.Type {
+	case "mysql":
+		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+			Logger: gLogger.Default.LogMode(logLevel),
+			NowFunc: func() time.Time {
+				return time.Now().Local()
+			},
+		})
+	case "sqlite":
+		db, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{
+			Logger: gLogger.Default.LogMode(logLevel),
+			NowFunc: func() time.Time {
+				return time.Now().Local()
+			},
+		})
+	case "postgres", "": // 默认使用postgres
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+			Logger: gLogger.Default.LogMode(logLevel),
+			NowFunc: func() time.Time {
+				return time.Now().Local()
+			},
+		})
+	default:
+		return fmt.Errorf("不支持的数据库类型: %s", cfg.Type)
+	}
+
 	if err != nil {
 		return fmt.Errorf("连接数据库失败: %w", err)
 	}
@@ -47,6 +74,7 @@ func InitGorm() error {
 		return err
 	}
 
+	// 设置连接池参数
 	if cfg.MaxOpenConns > 0 {
 		sqlDB.SetMaxOpenConns(cfg.MaxOpenConns)
 	} else {
@@ -59,7 +87,17 @@ func InitGorm() error {
 		sqlDB.SetMaxIdleConns(10)
 	}
 
-	sqlDB.SetConnMaxLifetime(time.Hour)
+	if cfg.ConnMaxLifetime > 0 {
+		sqlDB.SetConnMaxLifetime(time.Duration(cfg.ConnMaxLifetime) * time.Second)
+	} else {
+		sqlDB.SetConnMaxLifetime(time.Hour)
+	}
+
+	if cfg.ConnMaxIdleTime > 0 {
+		sqlDB.SetConnMaxIdleTime(time.Duration(cfg.ConnMaxIdleTime) * time.Second)
+	} else {
+		sqlDB.SetConnMaxIdleTime(30 * time.Minute)
+	}
 
 	// 测试连接
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -70,9 +108,49 @@ func InitGorm() error {
 
 	DB = db
 	logger.Info("数据库连接成功",
+		zap.String("type", cfg.Type),
 		zap.String("host", cfg.Host),
 		zap.String("dbname", cfg.DBName))
 	return nil
+}
+
+// generateDSN 根据数据库类型生成DSN字符串
+func generateDSN(cfg config.DatabaseConfig) (string, error) {
+	switch cfg.Type {
+	case "mysql":
+		// MySQL DSN格式: user:password@tcp(host:port)/dbname?charset=utf8mb4&parseTime=True&loc=Local
+		charset := cfg.Charset
+		if charset == "" {
+			charset = "utf8mb4"
+		}
+		parseTime := cfg.ParseTime
+		if !parseTime {
+			parseTime = true
+		}
+		loc := cfg.Loc
+		if loc == "" {
+			loc = "Local"
+		}
+		
+		return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%t&loc=%s",
+			cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DBName, charset, parseTime, loc), nil
+		
+	case "sqlite":
+		// SQLite DSN格式: file:path?cache=shared&mode=rwc
+		path := cfg.SQLitePath
+		if path == "" {
+			path = "./data/charlotte.db"
+		}
+		return fmt.Sprintf("file:%s?cache=shared&mode=rwc", path), nil
+		
+	case "postgres", "":
+		// PostgreSQL DSN格式: host= user= password= dbname= port= sslmode=disable TimeZone=Asia/Shanghai
+		return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
+			cfg.Host, cfg.User, cfg.Password, cfg.DBName, cfg.Port), nil
+		
+	default:
+		return "", fmt.Errorf("不支持的数据库类型: %s", cfg.Type)
+	}
 }
 
 // Migrate 执行数据库迁移

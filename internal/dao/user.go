@@ -18,33 +18,35 @@ var (
 )
 
 // UserDAO 用户数据访问对象
+// 继承基础DAO接口，同时保持原有的特殊方法
 type UserDAO struct {
-	db *gorm.DB
+	*BaseDAOImpl[model.User, uint]
 }
 
 // NewUserDAO 创建 DAO 实例
 func NewUserDAO(db *gorm.DB) *UserDAO {
 	return &UserDAO{
-		db: db,
+		BaseDAOImpl: NewBaseDAO[model.User, uint](db),
 	}
 }
 
-// Create 创建用户
+// Create 创建用户（重写基础方法，添加业务逻辑）
 func (d *UserDAO) Create(ctx context.Context, user *model.User) error {
 	// 检查用户名是否存在
-	var count int64
-	if err := d.db.WithContext(ctx).Model(&model.User{}).Where("username = ?", user.Username).Count(&count).Error; err != nil {
+	exists, err := d.Exists(ctx, map[string]interface{}{"username": user.Username})
+	if err != nil {
 		return err
 	}
-	if count > 0 {
+	if exists {
 		return ErrUserExists
 	}
 
 	// 检查邮箱是否存在
-	if err := d.db.WithContext(ctx).Model(&model.User{}).Where("email = ?", user.Email).Count(&count).Error; err != nil {
+	exists, err = d.Exists(ctx, map[string]interface{}{"email": user.Email})
+	if err != nil {
 		return err
 	}
-	if count > 0 {
+	if exists {
 		return errors.New("邮箱已被注册")
 	}
 
@@ -56,130 +58,64 @@ func (d *UserDAO) Create(ctx context.Context, user *model.User) error {
 	}
 	user.Password = string(hashedPassword)
 
-	return d.db.WithContext(ctx).Create(user).Error
-}
-
-// GetByID 根据 ID 获取用户
-func (d *UserDAO) GetByID(ctx context.Context, id uint) (*model.User, error) {
-	var user model.User
-	if err := d.db.WithContext(ctx).First(&user, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
-		}
-		return nil, err
-	}
-	return &user, nil
+	// 调用基础创建方法
+	return d.BaseDAOImpl.Create(ctx, user)
 }
 
 // GetByUsername 根据用户名获取用户
 func (d *UserDAO) GetByUsername(ctx context.Context, username string) (*model.User, error) {
-	var user model.User
-	if err := d.db.WithContext(ctx).Where("username = ?", username).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
-		}
-		return nil, err
-	}
-	return &user, nil
+	return d.GetOne(ctx, map[string]interface{}{"username": username})
 }
 
 // GetByEmail 根据邮箱获取用户
 func (d *UserDAO) GetByEmail(ctx context.Context, email string) (*model.User, error) {
-	var user model.User
-	if err := d.db.WithContext(ctx).Where("email = ?", email).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+	return d.GetOne(ctx, map[string]interface{}{"email": email})
+}
+
+// List 获取用户列表（重写基础方法，支持关键词搜索）
+func (d *UserDAO) List(ctx context.Context, options *QueryOptions) ([]*model.User, int64, error) {
+	// 如果options为空，创建默认选项
+	if options == nil {
+		options = &QueryOptions{
+			OrderBy:  "created_at",
+			OrderDir: "desc",
 		}
-		return nil, err
 	}
-	return &user, nil
+
+	// 处理关键词搜索
+	if options.Keyword != "" {
+		if options.Filters == nil {
+			options.Filters = make(map[string]interface{})
+		}
+		options.Filters["username LIKE ? OR email LIKE ? OR nickname LIKE ?"] = "%" + options.Keyword + "%"
+	}
+
+	return d.BaseDAOImpl.List(ctx, options)
 }
 
-// List 获取用户列表
-func (d *UserDAO) List(ctx context.Context, page, size int, keyword string) ([]*model.User, int64, error) {
-	var users []*model.User
-	var total int64
-
-	query := d.db.WithContext(ctx).Model(&model.User{})
-	if keyword != "" {
-		query = query.Where("username LIKE ? OR email LIKE ? OR nickname LIKE ?", "%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%")
-	}
-
-	if err := query.Count(&total).Error; err != nil {
-		return nil, 0, err
-	}
-
-	if err := query.Offset((page - 1) * size).Limit(size).Order("created_at DESC").Find(&users).Error; err != nil {
-		return nil, 0, err
-	}
-
-	return users, total, nil
-}
-
-// Update 更新用户
-func (d *UserDAO) Update(ctx context.Context, id uint, updates map[string]interface{}) error {
-	// 不允许直接更新密码，使用单独的方法
-	delete(updates, "password")
-	delete(updates, "id")
-
-	result := d.db.WithContext(ctx).Model(&model.User{}).Where("id = ?", id).Updates(updates)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return ErrUserNotFound
-	}
-	return nil
-}
-
-// UpdatePassword 更新密码
+// UpdatePassword 更新密码（特殊方法）
 func (d *UserDAO) UpdatePassword(ctx context.Context, id uint, newPassword string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
-	result := d.db.WithContext(ctx).Model(&model.User{}).Where("id = ?", id).Update("password", string(hashedPassword))
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return ErrUserNotFound
-	}
-	return nil
+	return d.Update(ctx, id, map[string]interface{}{"password": string(hashedPassword)})
 }
 
-// Delete 删除用户 (软删除)
-func (d *UserDAO) Delete(ctx context.Context, id uint) error {
-	result := d.db.WithContext(ctx).Delete(&model.User{}, id)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return ErrUserNotFound
-	}
-	return nil
-}
-
-// HardDelete 硬删除
-func (d *UserDAO) HardDelete(ctx context.Context, id uint) error {
-	result := d.db.WithContext(ctx).Unscoped().Delete(&model.User{}, id)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return ErrUserNotFound
-	}
-	return nil
-}
-
-// UpdateLastLogin 更新最后登录时间
+// UpdateLastLogin 更新最后登录时间（特殊方法）
 func (d *UserDAO) UpdateLastLogin(ctx context.Context, id uint) error {
-	return d.db.WithContext(ctx).Model(&model.User{}).Where("id = ?", id).Update("last_login", gorm.Expr("NOW()")).Error
+	return d.Update(ctx, id, map[string]interface{}{"last_login": gorm.Expr("NOW()")})
 }
 
-// CheckPassword 验证密码
+// CheckPassword 验证密码（特殊方法）
 func (d *UserDAO) CheckPassword(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	return err == nil
 }
+
+// 以下方法现在通过基础接口提供，无需重复实现：
+// - GetByID: 通过基础接口的 GetByID 方法
+// - Update: 通过基础接口的 Update 方法（已过滤密码字段）
+// - Delete: 通过基础接口的 Delete 方法
+// - HardDelete: 通过基础接口的 HardDelete 方法

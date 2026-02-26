@@ -101,6 +101,8 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
+	// 数据库类型: postgres, mysql, sqlite
+	Type         string `mapstructure:"type" json:"type"`
 	Host         string `mapstructure:"host" json:"host"`
 	Port         string `mapstructure:"port" json:"port"`
 	User         string `mapstructure:"user" json:"user"`
@@ -108,6 +110,23 @@ type DatabaseConfig struct {
 	DBName       string `mapstructure:"dbname" json:"dbname"`
 	MaxOpenConns int    `mapstructure:"max_open_conns" json:"max_open_conns"`
 	MaxIdleConns int    `mapstructure:"max_idle_conns" json:"max_idle_conns"`
+	
+	// SQLite特定配置
+	SQLitePath   string `mapstructure:"sqlite_path" json:"sqlite_path"`
+	
+	// MySQL特定配置
+	Charset      string `mapstructure:"charset" json:"charset"`
+	ParseTime    bool   `mapstructure:"parse_time" json:"parse_time"`
+	Loc          string `mapstructure:"loc" json:"loc"`
+	
+	// 连接池配置
+	ConnMaxLifetime int `mapstructure:"conn_max_lifetime" json:"conn_max_lifetime"`
+	ConnMaxIdleTime int `mapstructure:"conn_max_idle_time" json:"conn_max_idle_time"`
+	
+	// 缓存配置
+	CacheEnabled    bool `mapstructure:"cache_enabled" json:"cache_enabled"`
+	CacheTTL        int  `mapstructure:"cache_ttl" json:"cache_ttl"`
+	CacheMaxSize    int  `mapstructure:"cache_max_size" json:"cache_max_size"`
 }
 
 type RedisConfig struct {

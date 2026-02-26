@@ -143,7 +143,15 @@ func (s *UserService) GetUserByID(ctx context.Context, id uint) (*UserInfo, erro
 
 // GetUserList 获取用户列表
 func (s *UserService) GetUserList(ctx context.Context, page, size int, keyword string) ([]*UserInfo, int64, error) {
-	users, total, err := s.dao.List(ctx, page, size, keyword)
+	options := &dao.QueryOptions{
+		Page:    page,
+		Size:    size,
+		Keyword: keyword,
+		OrderBy: "created_at",
+		OrderDir: "desc",
+	}
+	
+	users, total, err := s.dao.List(ctx, options)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -153,7 +161,7 @@ func (s *UserService) GetUserList(ctx context.Context, page, size int, keyword s
 		list = append(list, s.toUserInfo(user))
 	}
 
-	return list, total, nil
+	return list, total, err
 }
 
 // UpdateUser 更新用户信息
