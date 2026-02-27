@@ -1,9 +1,7 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -42,7 +40,6 @@ func (m *PermissionMiddleware) CheckPermission(resourceType, operation string) g
 			ResourceType: resourceType,
 			Operation:    operation,
 			ResourceID:   m.extractResourceID(c),
-			ResourcePath: c.Request.URL.Path,
 		}
 
 		// 检查权限
@@ -55,7 +52,7 @@ func (m *PermissionMiddleware) CheckPermission(resourceType, operation string) g
 		}
 
 		if !result.HasPermission {
-			logger.Warn("权限不足", 
+			logger.Warn("权限不足",
 				zap.Uint("user_id", userID.(uint)),
 				zap.String("resource_type", resourceType),
 				zap.String("operation", operation),
@@ -183,7 +180,6 @@ func (m *PermissionMiddleware) CheckResourceOwnership(resourceType string, owner
 				ResourceType: resourceType,
 				Operation:    model.PermissionWrite,
 				ResourceID:   ownerID,
-				ResourcePath: c.Request.URL.Path,
 			}
 
 			result, err := m.permissionService.CheckPermission(c.Request.Context(), req)
@@ -205,10 +201,10 @@ func (m *PermissionMiddleware) GetUserPermissions() gin.HandlerFunc {
 		if !exists || userID.(uint) == 0 {
 			// 游客权限
 			c.JSON(http.StatusOK, gin.H{
-				"role":              model.RoleGuest,
-				"is_super_admin":    false,
+				"role":               model.RoleGuest,
+				"is_super_admin":     false,
 				"allowed_operations": model.PermissionRead,
-				"groups":            []interface{}{},
+				"groups":             []interface{}{},
 			})
 			c.Abort()
 			return
@@ -244,4 +240,3 @@ func (m *PermissionMiddleware) extractResourceID(c *gin.Context) uint {
 
 	return 0
 }
-
