@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/VennLe/charlotte/internal/middleware"
@@ -15,17 +13,10 @@ type PermissionExampleHandler struct {
 	permissionMiddleware *middleware.PermissionMiddleware
 }
 
-// NewPermissionExampleHandler 创建权限示例处理器
-func NewPermissionExampleHandler(permissionMiddleware *middleware.PermissionMiddleware) *PermissionExampleHandler {
-	return &PermissionExampleHandler{wssssssw23ddddddddddddweweewewde
-		permissionMiddleware: permissionMiddleware,
-	}dddddddddddddddddd
-}
-
 // RegisterRoutes 注册权限示例路由
 func (h *PermissionExampleHandler) RegisterRoutes(router *gin.RouterGroup) {
 	// 权限配置信息
-	router.GET("/permissions/config", h.permissionMiddleware.GetPermissionConfig())
+	router.GET("/permissions/config", h.permissionMiddleware.GetUserPermissions())
 
 	// 用户权限信息
 	router.GET("/permissions/user", h.permissionMiddleware.GetUserPermissions())
@@ -73,7 +64,7 @@ func (h *PermissionExampleHandler) RegisterRoutes(router *gin.RouterGroup) {
 func (h *PermissionExampleHandler) PublicExample(c *gin.Context) {
 	utils.Success(c, gin.H{
 		"message": "这是一个公开接口，无需登录即可访问",
-		"data":   "公开数据",
+		"data":    "公开数据",
 	})
 }
 
@@ -135,8 +126,8 @@ func (h *PermissionExampleHandler) GetUserExample(c *gin.Context) {
 	permissionResult, _ := c.Get("permission_result")
 
 	utils.Success(c, gin.H{
-		"message": "获取用户信息成功",
-		"user_id": userID,
+		"message":    "获取用户信息成功",
+		"user_id":    userID,
 		"permission": permissionResult,
 		"data": gin.H{
 			"username": "示例用户",
@@ -173,7 +164,7 @@ func (h *PermissionExampleHandler) GetContentExample(c *gin.Context) {
 	contentID := c.Param("id")
 
 	utils.Success(c, gin.H{
-		"message": "获取内容成功",
+		"message":    "获取内容成功",
 		"content_id": contentID,
 		"data": gin.H{
 			"title":   "示例内容标题",
@@ -200,9 +191,9 @@ func (h *PermissionExampleHandler) UpdateContentExample(c *gin.Context) {
 	contentID := c.Param("id")
 
 	utils.Success(c, gin.H{
-		"message": "更新内容成功",
+		"message":    "更新内容成功",
 		"content_id": contentID,
-		"data":    "内容已更新",
+		"data":       "内容已更新",
 	})
 }
 
@@ -211,9 +202,9 @@ func (h *PermissionExampleHandler) DeleteContentExample(c *gin.Context) {
 	contentID := c.Param("id")
 
 	utils.Success(c, gin.H{
-		"message": "删除内容成功",
+		"message":    "删除内容成功",
 		"content_id": contentID,
-		"data":    "内容已删除",
+		"data":       "内容已删除",
 	})
 }
 
@@ -222,11 +213,11 @@ func (h *PermissionExampleHandler) GetSystemInfoExample(c *gin.Context) {
 	utils.Success(c, gin.H{
 		"message": "获取系统信息成功",
 		"data": gin.H{
-			"system_name":    "Charlotte系统",
-			"version":        "1.0.0",
-			"uptime":         "7天12小时",
-			"active_users":   1000,
-			"system_status":  "正常",
+			"system_name":   "Charlotte系统",
+			"version":       "1.0.0",
+			"uptime":        "7天12小时",
+			"active_users":  1000,
+			"system_status": "正常",
 		},
 	})
 }
@@ -244,10 +235,10 @@ func (h *PermissionExampleHandler) AdminDashboardExample(c *gin.Context) {
 	utils.Success(c, gin.H{
 		"message": "获取管理面板数据成功",
 		"data": gin.H{
-			"total_users":       1500,
-			"active_users":      1200,
+			"total_users":         1500,
+			"active_users":        1200,
 			"today_registrations": 25,
-			"system_health":     "良好",
+			"system_health":       "良好",
 			"recent_activities": []string{
 				"用户A登录",
 				"用户B创建内容",
@@ -300,5 +291,5 @@ func (h *PermissionExampleHandler) PermissionUsageExample(c *gin.Context) {
 		},
 	}
 
-	response.SuccessWithData(c, examples)
+	utils.Success(c, examples)
 }
