@@ -60,7 +60,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 将用户信息存入上下文
 		c.Set("user_id", uint((*claims)["user_id"].(float64)))
 		c.Set("username", (*claims)["username"].(string))
-		c.Set("role", (*claims)["role"].(string))
+		c.Set("user_role", (*claims)["role"].(string))
 
 		c.Next()
 	}
@@ -69,7 +69,7 @@ func JWTAuth() gin.HandlerFunc {
 // AdminOnly 仅管理员访问
 func AdminOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		role, exists := c.Get("role")
+		role, exists := c.Get("user_role")
 		if !exists || role != "admin" {
 			utils.Error(c, http.StatusForbidden, "权限不足")
 			c.Abort()

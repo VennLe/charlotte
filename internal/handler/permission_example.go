@@ -4,13 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/VennLe/charlotte/internal/middleware"
-	"github.com/VennLe/charlotte/internal/model"
 	"github.com/VennLe/charlotte/pkg/utils"
 )
 
 // PermissionExampleHandler 权限示例处理器
 type PermissionExampleHandler struct {
-	permissionMiddleware *middleware.PermissionMiddleware
+	permissionMiddleware *middleware.SimplifiedPermissionMiddleware
 }
 
 // RegisterRoutes 注册权限示例路由
@@ -40,23 +39,23 @@ func (h *PermissionExampleHandler) RegisterRoutes(router *gin.RouterGroup) {
 		exampleGroup.GET("/super-admin-only", h.permissionMiddleware.RequireSuperAdmin(), h.SuperAdminOnlyExample)
 
 		// 具体权限检查示例
-		exampleGroup.GET("/user/:id", h.permissionMiddleware.CheckPermission("user", model.PermissionRead), h.GetUserExample)
-		exampleGroup.PUT("/user/:id", h.permissionMiddleware.CheckPermission("user", model.PermissionWrite), h.UpdateUserExample)
-		exampleGroup.DELETE("/user/:id", h.permissionMiddleware.CheckPermission("user", model.PermissionDelete), h.DeleteUserExample)
+		exampleGroup.GET("/user/:id", h.permissionMiddleware.CheckPermission("user", "read"), h.GetUserExample)
+		exampleGroup.PUT("/user/:id", h.permissionMiddleware.CheckPermission("user", "write"), h.UpdateUserExample)
+		exampleGroup.DELETE("/user/:id", h.permissionMiddleware.CheckPermission("user", "delete"), h.DeleteUserExample)
 
 		// 内容权限示例
-		exampleGroup.GET("/content/:id", h.permissionMiddleware.CheckPermission("content", model.PermissionRead), h.GetContentExample)
-		exampleGroup.POST("/content", h.permissionMiddleware.CheckPermission("content", model.PermissionWrite), h.CreateContentExample)
-		exampleGroup.PUT("/content/:id", h.permissionMiddleware.CheckPermission("content", model.PermissionWrite), h.UpdateContentExample)
-		exampleGroup.DELETE("/content/:id", h.permissionMiddleware.CheckPermission("content", model.PermissionDelete), h.DeleteContentExample)
+		exampleGroup.GET("/content/:id", h.permissionMiddleware.CheckPermission("content", "read"), h.GetContentExample)
+		exampleGroup.POST("/content", h.permissionMiddleware.CheckPermission("content", "write"), h.CreateContentExample)
+		exampleGroup.PUT("/content/:id", h.permissionMiddleware.CheckPermission("content", "write"), h.UpdateContentExample)
+		exampleGroup.DELETE("/content/:id", h.permissionMiddleware.CheckPermission("content", "delete"), h.DeleteContentExample)
 
 		// 系统权限示例
-		exampleGroup.GET("/system/info", h.permissionMiddleware.CheckPermission("system", model.PermissionRead), h.GetSystemInfoExample)
-		exampleGroup.PUT("/system/settings", h.permissionMiddleware.CheckPermission("system", model.PermissionWrite), h.UpdateSystemSettingsExample)
+		exampleGroup.GET("/system/info", h.permissionMiddleware.CheckPermission("system", "read"), h.GetSystemInfoExample)
+		exampleGroup.PUT("/system/settings", h.permissionMiddleware.CheckPermission("system", "write"), h.UpdateSystemSettingsExample)
 
 		// 管理权限示例
-		exampleGroup.GET("/admin/dashboard", h.permissionMiddleware.CheckPermission("admin", model.PermissionRead), h.AdminDashboardExample)
-		exampleGroup.POST("/admin/users", h.permissionMiddleware.CheckPermission("admin", model.PermissionWrite), h.CreateAdminUserExample)
+		exampleGroup.GET("/admin/dashboard", h.permissionMiddleware.CheckPermission("admin", "read"), h.AdminDashboardExample)
+		exampleGroup.POST("/admin/users", h.permissionMiddleware.CheckPermission("admin", "write"), h.CreateAdminUserExample)
 	}
 }
 
